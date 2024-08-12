@@ -22,7 +22,7 @@ To get a local copy of the project up and running, follow these steps:
 4. **Set up environment variables:**
 
     - Create a `.env` file in the root of your project directory. This file should contain environment-specific variables that your application needs. 
-    - Example in`.env.exampe` file
+    - Example in`.env.example` file
 
 5. **Start the development server:**
 
