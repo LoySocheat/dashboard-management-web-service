@@ -19,11 +19,15 @@ To get a local copy of the project up and running, follow these steps:
     ```bash
     npm install
     ```
+4. **Set up environment variables:**
 
-4. **Start the development server:**
+    - Create a `.env` file in the root of your project directory. This file should contain environment-specific variables that your application needs. 
+    - Example in`.env.example` file
+
+5. **Start the development server:**
 
     ```bash
-    npm start
+    npm run dev
     ```
 
     The application should now be running at `http://localhost:8081/`.
