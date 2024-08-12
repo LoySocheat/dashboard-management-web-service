@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axiosClient from "../axios-client";
 import { formatDataTime } from "../utils/Format";
 import Pagination from "../components/Pagination";
+import ClientLogDetail from "./ClientLogDetail";
 
 const ClientLogs = () => {
     const [clientLogs, setClientLog] = useState([]);
@@ -62,6 +63,19 @@ const ClientLogs = () => {
     const setLimitPage = (number) => {
         setLimit(number);
     };
+
+    const [isModalDetailOpen , setIsModalDetailOpen] = useState(false);
+    const [selectedClientLogId, setSelectedClientLog] = useState(null);
+
+    const handleOpenModalDetail = (clientLog) => {
+        setSelectedClientLog(clientLog);
+        setIsModalDetailOpen(true);
+    }
+
+    const handleCloseModalDetail = () => {
+        setSelectedClientLog(null);
+        setIsModalDetailOpen(false);
+    }
 
     const handleSearch = () => {
         setLoadingPage(true);
@@ -216,7 +230,11 @@ const ClientLogs = () => {
                     )}
                     {!loading && <tbody>
                         {clientLogs.map((clientLog) => (
-                            <tr key={clientLog.id}>
+                            <tr 
+                                className="hover-element"
+                                key={clientLog.id} 
+                                onClick={(event) => handleOpenModalDetail(clientLog, event)}
+                            >
                                 <td>{clientLog.id}</td>
                                 <td>{clientLog.userId}</td>
                                 <td>{clientLog.app_info.model}</td>
@@ -236,7 +254,15 @@ const ClientLogs = () => {
             onNextPage={nextPage}
             onPage={setCurrentPage}
         />
+        {isModalDetailOpen && (
+            <ClientLogDetail
+                onClose={handleCloseModalDetail}
+                selectedClientLog={selectedClientLogId}
+            />
+        )}
         </div>
+
+
     );
 }
 

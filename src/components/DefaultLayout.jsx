@@ -1,6 +1,6 @@
 import { Navigate, Outlet, Link , useLocation } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 import axiosClient from "../axios-client";
 import IconUser from "../assets/icons/IconUser";
 import Logo from '../assets/images/logo.jpg';
@@ -35,7 +35,6 @@ const styles = {
   },
 
 };
-
 const DefaultLayout = () => {
   const { user, token, setUser, setToken, notification } = useStateContext();
   if (!token) {
@@ -54,9 +53,19 @@ const DefaultLayout = () => {
 
   const location = useLocation();
   const currentPath = location.pathname;
+  const [permissions, setPermissions] = useState([]);
 
+  const getMe = () => {
+    axiosClient.get("/users/me").then(({ data }) => {
+        setUser(data);
+        setPermissions(data.roleId);
+        console.log(data.roleId);
+      }
+    );
+  };
 
   useEffect(() => {
+    getMe();
     axiosClient.get("/users").then(({ data }) => {
       setUser(data);
     });
@@ -64,6 +73,17 @@ const DefaultLayout = () => {
   return (
     <div id="defaultLayout">
       <aside style={styles.sideBar}>
+        {/* show only roles 1 or 2 */}
+          { permissions 
+            && (permissions === 1 || permissions === 2)
+          &&<Link to="/roles" 
+              style={{...styles.content,
+              backgroundColor: currentPath === "/roles" ? "rgba(0, 0, 0, 0.2)" : "transparent",
+            }}
+          >
+            <IconBrandStackshare iconColor="#ffffff" />
+            &nbsp; Roles
+          </Link>}
         <Link to="/users" 
           style={{...styles.content,
             backgroundColor: currentPath === "/users" ? "rgba(0, 0, 0, 0.2)" : "transparent",
@@ -71,14 +91,6 @@ const DefaultLayout = () => {
         >
           <IconUser iconColor="#ffffff" />
           &nbsp; Users
-        </Link>
-        <Link to="/roles" 
-            style={{...styles.content,
-            backgroundColor: currentPath === "/roles" ? "rgba(0, 0, 0, 0.2)" : "transparent",
-          }}
-        >
-          <IconBrandStackshare iconColor="#ffffff" />
-          &nbsp; Roles
         </Link>
         
         <Link to="/client-logs" 

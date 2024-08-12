@@ -118,7 +118,7 @@ const AppFunctions = () => {
                 }}
             >
                 <h1>App Functions</h1>
-            {permissions != '3' && '4' && <button onClick={() => handleAddClick()} className="btn-add">
+            {(permissions == 1 || permissions == 2 ) && <button onClick={() => handleAddClick()} className="btn-add">
                 New Function
                 </button>}
             </div>
@@ -131,7 +131,7 @@ const AppFunctions = () => {
                             <th>Remark</th>
                             <th>Last Updated</th>
                             <th>Status</th>
-                            {permissions != '3' && '4' &&  <th>Actions</th>}
+                            {(permissions != 4 ) &&  <th>Actions</th>}
                         </tr>
                     </thead>
                     {loading && (
@@ -182,7 +182,9 @@ const AppFunctions = () => {
                                         </p>
                                         </div>
                                     </td>
-                                    {permissions != 3 && 4 && <td>
+                                    { (permissions != 4 ) &&
+
+                                    <td>
                                         <div
                                             style={{
                                                 display: "flex",
@@ -200,7 +202,7 @@ const AppFunctions = () => {
                                                 Edit&nbsp;
                                                 <IconEdit iconSize="20px" iconColor="#ffffff" />
                                             </button>
-                                            <button
+                                            { permissions != 3 && <button
                                                 style={{
                                                     marginRight: "5px",
                                                     display: "flex",
@@ -211,9 +213,10 @@ const AppFunctions = () => {
                                             >
                                                 Delete&nbsp;
                                                 <IconTrash iconSize="20px" iconColor="#ffffff" />
-                                            </button>
+                                            </button>}
                                         </div>
-                                    </td>}
+                                    </td>
+                                    }
                                 </tr>
                             ))}
                         </tbody>

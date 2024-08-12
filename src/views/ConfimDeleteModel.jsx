@@ -4,8 +4,8 @@ const ConfirmDeleteModal = ({ isOpen, onClose, onConfirm, description }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-backdrop">
-      <div className="deletion-modal">
+    <div className="modal-backdrop" onClick={onClose}>
+      <div className="deletion-modal" onClick={(e) => e.stopPropagation()}>
         <div className="deletion-modal-body">
           <h1>Confirm Deletion</h1>
           <p>

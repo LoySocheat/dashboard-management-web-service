@@ -21,15 +21,7 @@ const Login = () => {
         })
         .catch(err => {
             const response = err.response;
-            if(response && response.status === 422){
-                if(response.data.errors){
-                    setErrors(response.data.errors)
-                } else {
-                    setErrors({
-                        email: [response.data.message]
-                    })
-                }
-            }
+            setErrors(response.data)
         })
     }
     return ( 
@@ -39,14 +31,18 @@ const Login = () => {
                     <h1 className="title">
                         Login into your account
                     </h1>
-                    { errors && <div className="alert">
-                        {Object.keys(errors).map(key => (
-                            <p key={key}>{errors[key][0]}</p>
-                        ))}
+                    { errors && <div className="alert"
+                        style={{background: '#FF5963' }}
+                    >
+                        <p>{errors.message}</p>
                     </div>
                     }
-                    <input ref={emailRef} type="text" placeholder="Email" />
-                    <input ref={passwordRef} type="password" placeholder="Password" />
+                    <input
+                        style={errors&& {borderColor: '#FF5963'}}  
+                    ref={emailRef} type="text" placeholder="Email" />
+                    <input
+                        style={errors&& {borderColor: '#FF5963'}}
+                    ref={passwordRef} type="password" placeholder="Password" />
                     <button className="btn btn-block">
                         Login
                     </button>

@@ -139,7 +139,7 @@ const AppFunctionsStatuses = () => {
                             <th>Note</th>
                             <th>Status ID</th>
                             <th>Created At</th>
-                            <th>Actions</th>
+                            { (permissions == 1 || permissions == 2 ) && <th>Actions</th>}
                         </tr>
                     </thead>
                     <tbody>
@@ -150,7 +150,7 @@ const AppFunctionsStatuses = () => {
                                 <td>{appFunctionsStatus.note}</td>
                                 <td>{appFunctionsStatus.status_code}</td>
                                 <td>{formatDataTime(appFunctionsStatus.createdAt)}</td>
-                                <td
+                                { (permissions == 1 || permissions == 2 ) && <td
                                     style={{
                                         display: "flex",
                                     }}
@@ -177,7 +177,7 @@ const AppFunctionsStatuses = () => {
                                         Delete&nbsp;
                                         <IconTrash iconSize="20px" iconColor="#ffffff" />
                                     </button>
-                                </td>
+                                </td>}
                             </tr>
                         ))}
                     </tbody>

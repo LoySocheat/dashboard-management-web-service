@@ -8,6 +8,7 @@ const AppFunctionForm = ({functionId, onClose, handleClickUpdate}) => {
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState(null);
     const { setNotification } = useStateContext();
+    const [permissions , setPermissions] = useState([]);
     const [appFunction, setAppFunction] = useState({
         id: null,
         remark: "",
@@ -20,7 +21,7 @@ const AppFunctionForm = ({functionId, onClose, handleClickUpdate}) => {
 
         ev.preventDefault();
         if (functionId) {
-            axiosClient.put(`/app-functions/${functionId}`, appFunction)
+            axiosClient.put(`/app-functions/${functionId}/status-update`, appFunction)
             .then(() => {
                 setNotification(
                     "Function updated successfully"
@@ -63,7 +64,18 @@ const AppFunctionForm = ({functionId, onClose, handleClickUpdate}) => {
         });
     }
 
+    const getMe = () => {
+        axiosClient.get("/users/me")
+        .then(({ data }) => {
+            setPermissions(data.roleId);
+        })
+        .catch((error) => {
+            console.error("Error fetching user data:", error);
+        })
+    };
+
     useEffect(() => {
+        getMe();
         if (functionId) {
             fetchAppFunction();
         };
@@ -82,8 +94,8 @@ const AppFunctionForm = ({functionId, onClose, handleClickUpdate}) => {
 
     return (
         <div>
-            <div className="card animated fadeInDown modal-backdrop">
-                <div className="modal">
+            <div className="card animated fadeInDown modal-backdrop" onClick={onClose}>
+                <div className="modal" onClick={(e) => e.stopPropagation()}>
                 {loading && <div className="text-center">Loading...</div>}
                 {errors && (
                     <div className="alert">
@@ -96,7 +108,9 @@ const AppFunctionForm = ({functionId, onClose, handleClickUpdate}) => {
                     <form onSubmit={onSubmit}>
                         {!functionId && <h1>Add App Function</h1>}
                         {functionId && <h1>Update App Function</h1>}
+                        {console.log(permissions)}
                         <input
+                            disabled={permissions != 1 && permissions != 2}
                             value={appFunction.group}
                             onChange={(ev) => setAppFunction({ ...appFunction, group: ev.target.value })}
                             placeholder="Function Name"

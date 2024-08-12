@@ -35,13 +35,14 @@ const UserForm = ({userId, onClose, handleClickUpdate}) => {
       })
       .catch((err) => {
         const response = err.response;
-        if (response && response.status === 422) {
-          setErrors(response.data.errors);
-        }
+        setErrors(response.data.message);
+        // if (response && response.status === 422) {
+        // }
       })
       .finally(() => {setLoading(false)});
     } else {
       if (user.password != user.password_confirmation ){
+        setErrors('Password and Password Confirmation must be the same');
         return true;
       }
       const payload = {
@@ -61,7 +62,7 @@ const UserForm = ({userId, onClose, handleClickUpdate}) => {
       })
       .catch((err) => {
         const response = err.response;
-        setErrors(response.data.errors);
+        setErrors(response.data.message);
         }).finally(() => {setLoading(false)});
       }
   };
@@ -96,13 +97,15 @@ const UserForm = ({userId, onClose, handleClickUpdate}) => {
     <>
       <div className="modal-backdrop" onClick={onClose}>
       <div className="card animated fadeInDown modal-backdrop">
-        <div className="modal">
+        <div className="modal"
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
           {loading && <div className="text-center">Loading...</div>}
           {errors && (
             <div className="alert">
-              {Object.keys(errors).map((key) => (
-                <p key={key}>{errors[key][0]}</p>
-              ))}
+              <p>{errors}</p>
             </div>
           )}
           {!loading && (

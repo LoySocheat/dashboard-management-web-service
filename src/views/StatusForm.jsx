@@ -76,8 +76,8 @@ const StatusForm = ({statusId, onClose, handleClickUpdate}) => {
 
   return (
     <div>
-      <div className="card animated fadeInDown modal-backdrop">
-        <div className="modal">
+      <div className="card animated fadeInDown modal-backdrop" onClick={onClose}>
+        <div className="modal" onClick={(e) => e.stopPropagation()}>
           {loading && <div className="text-center">Loading...</div>}
           {errors && (
             <div className="alert">
