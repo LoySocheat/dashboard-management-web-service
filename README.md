@@ -27,7 +27,7 @@ To get a local copy of the project up and running, follow these steps:
 5. **Start the development server:**
 
     ```bash
-    npm start
+    npm run dev
     ```
 
     The application should now be running at `http://localhost:8081/`.
