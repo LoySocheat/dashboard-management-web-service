@@ -11,13 +11,14 @@ const Login = () => {
         ev.preventDefault();
         const payload = {
             phone: emailRef.current.value,
-            password: passwordRef.current.value
+            password: passwordRef.current.value,
         }
-        axiosClient.post('/login', payload)
+        axiosClient.post('/login-dashboard', payload)
         .then(({data}) => {
-            setUser(data.user)
             setToken(data.accessToken)
             localStorage.setItem('permissions', JSON.stringify(data.user.roleId))
+            setUser(data.user)
+            console.log(data.user)
         })
         .catch(err => {
             const response = err.response;
@@ -39,7 +40,7 @@ const Login = () => {
                     }
                     <input
                         style={errors&& {borderColor: '#FF5963'}}  
-                    ref={emailRef} type="text" placeholder="Email" />
+                    ref={emailRef} type="text" placeholder="Phone" />
                     <input
                         style={errors&& {borderColor: '#FF5963'}}
                     ref={passwordRef} type="password" placeholder="Password" />

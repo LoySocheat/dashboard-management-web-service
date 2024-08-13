@@ -4,15 +4,18 @@ const StateContext = createContext({
     user: null,
     token: null,
     notification: null,
+    sessionExpired: null,
     setUser: () => {},
     setToken: () => {},
-    setNotification: () => {}
+    setNotification: () => {},
+    setSessionExpired: () => {}
 });
 
 export const ContextProvider = ({children}) => {
     const [user, setUser ] = useState({});
     const [notification, _setNotification] = useState('')
     const [token, _setToken ] = useState(localStorage.getItem('ACCESS_TOKEN'));
+    const [sessionExpired , setSessionExpired] = useState(false);
 
     const setNotification = (message) => {
         _setNotification(message);
@@ -36,7 +39,9 @@ export const ContextProvider = ({children}) => {
             setUser,
             setToken,
             notification,
-            setNotification
+            sessionExpired,
+            setNotification,
+            setSessionExpired
         }}>
             {children}
         </StateContext.Provider>

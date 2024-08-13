@@ -18,7 +18,7 @@ const Users = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loadingPage, setLoadingPage] = useState(false);
-  const [limit, setLimit] = useState(6);
+  const [limit, setLimit] = useState(10);
   const [permissions , setPermissions] = useState(null);
   const [username, setUsername] = useState('');
   const [phone, setPhone] = useState('');

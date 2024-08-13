@@ -53,7 +53,7 @@ const Roles= () => {
                     {loading && (
                         <tbody>
                         <tr>
-                            <td colSpan="5" className="text-center">
+                            <td colSpan="3" className="text-center">
                             Loading...
                             </td>
                         </tr>

@@ -23,7 +23,8 @@ const styles = {
     height: "100vh",
     padding: "20px",
     paddingBottom: "30vh",
-    // backgroundImage: "linear-gradient(to bottom, #ffffff 0%, #f0f0f0 100%)"
+    position: "relative",
+    zIndex: 100,
   },
   logoImage: {
     width: '20%',
@@ -36,7 +37,7 @@ const styles = {
 
 };
 const DefaultLayout = () => {
-  const { user, token, setUser, setToken, notification } = useStateContext();
+  const { user, token, setUser, setToken, notification, sessionExpired, setSessionExpired } = useStateContext();
   if (!token) {
     return <Navigate to="/login" />;
   }
@@ -59,7 +60,8 @@ const DefaultLayout = () => {
     axiosClient.get("/users/me").then(({ data }) => {
         setUser(data);
         setPermissions(data.roleId);
-        console.log(data.roleId);
+      }).catch((err) => {
+        setSessionExpired(true);
       }
     );
   };
@@ -72,7 +74,8 @@ const DefaultLayout = () => {
   }, []);
   return (
     <div id="defaultLayout">
-      <aside style={styles.sideBar}>
+      <aside style={styles.sideBar}
+      >
         {/* show only roles 1 or 2 */}
           { permissions 
             && (permissions === 1 || permissions === 2)
@@ -118,23 +121,103 @@ const DefaultLayout = () => {
           &nbsp; Function Statuses
         </Link>
       </aside>
-      <div className="content">
-        <header>
+      <div className="content"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          height: "100vh",
+        }}
+      >
+        <header
+          style={{
+            position: "sticky",
+            top: 0,
+            display: "flex",
+            zIndex: 1000,
+          }}
+        >
           <div>
           <img src={Logo} alt="Computer Logo" style={styles.logoImage}/>
           </div>
           <div  style={{color: 'white'}}>
-            Yoo! <strong style={{color: 'green', marginRight: '30px'}}>{user.name}</strong>
+            Yoo! 
+            <strong 
+              style={{
+                color: 'white',
+                marginRight: '30px',
+                textTransform: "capitalize",
+              }}
+            >
+            &nbsp;{user.username}
+            </strong>
             <a href="#" onClick={onLogout} className="btn-logout" style={{color: 'white', border: '1px solid #b72424', padding: '5px'}}>
               Logout
             </a>
           </div>
         </header>
-        <main>
+        <main 
+          style={{
+            position: "relative",
+            padding: "20px",
+            overflowY: "auto",
+            height: "100%",
+          }}
+        >
           <Outlet />
         </main>
       </div>
       {notification && <div className="notification">{notification}</div>}
+      {sessionExpired && <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          zIndex: 1000,
+        }}
+      >
+        <div
+          style={{
+            padding: "20px",
+            backgroundColor: "white",
+            borderRadius: "5px",
+            textAlign: "center",
+            width: "500px",
+            height: "200px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <h1
+            style={{
+              color: "red",
+              fontSize: "24px",
+              marginBottom: "20px",
+            }}
+          >Session Expired</h1>
+          <p>Your session is expired, please log in again!</p>
+          
+          <button className="btn-edit"
+            style={{
+              padding: "10px 20px",
+              backgroundColor: "#007bff",
+              color: "white",
+              borderRadius: "5px",
+              textDecoration: "none",
+            }}
+            onClick={onLogout}
+          >
+            Login again
+          </button>
+        </div>
+      </div>}
     </div>
   );
 };
